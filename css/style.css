@@ -1055,8 +1055,8 @@ h1 {
 
 /* === GDD uyum revizyonu: tek sayfalık 20 bölümlük SVG harita === */
 .levels-grid.single-page-map {
-    width: min(1120px, 100%);
-    height: min(72vh, 720px);
+    width: min(2000px, 100%);
+    height: min(85vh, 1200px);
     min-height: 560px;
     overflow: hidden;
     aspect-ratio: 1200 / 760;
@@ -1235,7 +1235,7 @@ h1 {
 
 /* === v2: SVG-coordinate locked level map === */
 .levels-grid.single-page-map {
-    width: min(1120px, calc(100vw - 32px), 152vh);
+    width: min(2000px, calc(100vw - 32px));
     height: auto !important;
     min-height: 0 !important;
     aspect-ratio: 1200 / 760;
