@@ -1234,8 +1234,12 @@ h1 {
 
 
 /* === v2: SVG-coordinate locked level map === */
+#level-select .level-header,
 .levels-grid.single-page-map {
     width: min(2000px, calc(100vw - 32px), calc((100vh - 130px) * 1200 / 760));
+}
+
+.levels-grid.single-page-map {
     height: auto !important;
     min-height: 0 !important;
     aspect-ratio: 1200 / 760;
@@ -1277,8 +1281,11 @@ h1 {
 }
 
 @media (max-width: 720px) {
+    #level-select .level-header,
     .levels-grid.single-page-map {
         width: min(calc(100vw - 18px), calc((100vh - 100px) * 1200 / 760));
+    }
+    .levels-grid.single-page-map {
         border-width: 5px;
         border-radius: 18px;
     }
