@@ -1235,7 +1235,7 @@ h1 {
 
 /* === v2: SVG-coordinate locked level map === */
 .levels-grid.single-page-map {
-    width: min(2000px, calc(100vw - 32px));
+    width: min(2000px, calc(100vw - 32px), calc((100vh - 130px) * 1200 / 760));
     height: auto !important;
     min-height: 0 !important;
     aspect-ratio: 1200 / 760;
@@ -1278,7 +1278,7 @@ h1 {
 
 @media (max-width: 720px) {
     .levels-grid.single-page-map {
-        width: calc(100vw - 18px);
+        width: min(calc(100vw - 18px), calc((100vh - 100px) * 1200 / 760));
         border-width: 5px;
         border-radius: 18px;
     }
