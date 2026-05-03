@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-label="Arapça Macerası 20 bölümlük seviye yolu">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#99e8ff"/>
+      <stop offset="0.55" stop-color="#d8f8ff"/>
+      <stop offset="1" stop-color="#fff2c8"/>
+    </linearGradient>
+    <linearGradient id="hillBack" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6fd36a"/>
+      <stop offset="1" stop-color="#278c55"/>
+    </linearGradient>
+    <linearGradient id="hillFront" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#b9ed72"/>
+      <stop offset="1" stop-color="#74cf4f"/>
+    </linearGradient>
+    <filter id="roadShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#2b6d42" flood-opacity="0.22"/>
+    </filter>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#25543b" flood-opacity="0.16"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="760" fill="url(#sky)"/>
+  <circle cx="1035" cy="108" r="58" fill="#ffe27c" opacity="0.95"/>
+
+  <g opacity="0.96" filter="url(#soft)">
+    <ellipse cx="180" cy="122" rx="82" ry="32" fill="#fff"/>
+    <ellipse cx="257" cy="114" rx="98" ry="40" fill="#fff"/>
+    <ellipse cx="340" cy="130" rx="70" ry="30" fill="#fff"/>
+    <ellipse cx="835" cy="154" rx="78" ry="31" fill="#fff"/>
+    <ellipse cx="910" cy="143" rx="96" ry="39" fill="#fff"/>
+    <ellipse cx="990" cy="158" rx="66" ry="29" fill="#fff"/>
+  </g>
+
+  <path d="M0 360 C150 262 278 270 438 365 C565 438 680 285 810 330 C970 385 1050 308 1200 348 L1200 760 L0 760 Z" fill="url(#hillBack)" opacity="0.96"/>
+  <path d="M0 455 C145 350 284 414 430 478 C590 548 695 410 842 458 C980 505 1085 430 1200 480 L1200 760 L0 760 Z" fill="url(#hillFront)"/>
+  <path d="M0 616 C188 540 338 610 515 622 C750 640 810 535 1028 572 C1120 588 1168 604 1200 628 L1200 760 L0 760 Z" fill="#baf178"/>
+
+  <g opacity="0.92">
+    <path d="M72 0 C34 88 45 178 74 258 C103 340 78 423 16 516 L0 516 L0 0 Z" fill="#2f6b40"/>
+    <path d="M1130 0 C1170 95 1158 198 1125 286 C1092 372 1138 446 1200 530 L1200 0 Z" fill="#2f6b40"/>
+    <circle cx="92" cy="80" r="82" fill="#28723d"/>
+    <circle cx="1132" cy="82" r="92" fill="#28723d"/>
+    <circle cx="58" cy="165" r="76" fill="#3d9455"/>
+    <circle cx="1175" cy="170" r="78" fill="#3d9455"/>
+  </g>
+
+  <!-- This road path is the single source of visual truth for the JavaScript node coordinates. -->
+  <path id="level-road"
+        d="M105 622 C150 590 148 530 168 492 C200 430 244 382 316 344 C390 306 470 356 475 430 C482 520 424 545 505 592 C585 640 700 625 735 586 C790 526 800 455 846 421 C900 370 932 340 1016 346 C1100 354 1110 438 1068 426 C1005 408 996 520 1020 526 C1065 535 1010 590 1040 604 C1086 625 1118 632 1156 655"
+        fill="none" stroke="#ffe1a0" stroke-width="66" stroke-linecap="round" stroke-linejoin="round" filter="url(#roadShadow)"/>
+  <path d="M105 622 C150 590 148 530 168 492 C200 430 244 382 316 344 C390 306 470 356 475 430 C482 520 424 545 505 592 C585 640 700 625 735 586 C790 526 800 455 846 421 C900 370 932 340 1016 346 C1100 354 1110 438 1068 426 C1005 408 996 520 1020 526 C1065 535 1010 590 1040 604 C1086 625 1118 632 1156 655"
+        fill="none" stroke="#f3c777" stroke-width="14" stroke-linecap="round" stroke-dasharray="1 36" opacity="0.72"/>
+
+  <!-- Subtle pads under dynamic HTML buttons. These are not interactive; they help visually anchor nodes to the road. -->
+  <g id="node-pads" fill="#fff8dd" stroke="#f2c66d" stroke-width="4" opacity="0.50">
+    <circle cx="105" cy="622" r="37"/><circle cx="145" cy="562" r="37"/><circle cx="168" cy="492" r="37"/><circle cx="232" cy="405" r="37"/>
+    <circle cx="316" cy="344" r="37"/><circle cx="416" cy="366" r="37"/><circle cx="475" cy="430" r="37"/><circle cx="458" cy="516" r="37"/>
+    <circle cx="505" cy="592" r="37"/><circle cx="618" cy="612" r="37"/><circle cx="735" cy="586" r="37"/><circle cx="794" cy="508" r="37"/>
+    <circle cx="846" cy="421" r="37"/><circle cx="922" cy="352" r="37"/><circle cx="1016" cy="346" r="37"/><circle cx="1068" cy="426" r="37"/>
+    <circle cx="1020" cy="526" r="37"/><circle cx="1040" cy="604" r="37"/><circle cx="1110" cy="632" r="37"/><circle cx="1156" cy="655" r="37"/>
+  </g>
+
+  <g opacity="0.25" fill="#ffffff">
+    <circle cx="86" cy="610" r="10"/><circle cx="330" cy="338" r="8"/><circle cx="620" cy="620" r="9"/>
+    <circle cx="875" cy="374" r="8"/><circle cx="1090" cy="654" r="10"/>
+  </g>
+</svg>

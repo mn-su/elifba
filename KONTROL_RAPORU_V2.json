@@ -1,0 +1,36 @@
+{
+  "checks": [
+    {
+      "cmd": "node --check js/levels.js",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cmd": "node --check js/game.js",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cmd": "node --check js/audio.js",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "cmd": "node validate_project.js",
+      "returncode": 0,
+      "stdout": "{\n  \"ok\": true,\n  \"levelCount\": 20,\n  \"taskCount\": 60,\n  \"badgeCount\": 7,\n  \"errors\": [],\n  \"warnings\": []\n}\n",
+      "stderr": ""
+    }
+  ],
+  "validation": {
+    "ok": true,
+    "levelCount": 20,
+    "taskCount": 60,
+    "badgeCount": 7,
+    "errors": [],
+    "warnings": []
+  }
+}

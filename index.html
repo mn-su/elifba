@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="tr" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elifba Macerası - Aslan Ahmet ile Öğren</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Lexend:wght@400;600;700;800;900&family=Noto+Naskh+Arabic:wght@400;600;700&family=Noto+Sans:wght@400;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  </head>
+<body>
+    <div id="app">
+        <!-- Ana Menü -->
+        <section id="main-menu" class="screen active">
+            <div class="menu-content">
+                <div class="mascot-container">
+                    <svg id="lion-ahmet" viewBox="0 0 200 200" class="mascot">
+                        <!-- Aslan Ahmet - Basit ve Sevimli -->
+                        <circle cx="100" cy="90" r="60" fill="#FFB347"/>
+                        <circle cx="100" cy="90" r="50" fill="#FFE4B5"/>
+                        <!-- Gözler -->
+                        <circle cx="80" cy="80" r="12" fill="white"/>
+                        <circle cx="120" cy="80" r="12" fill="white"/>
+                        <circle cx="82" cy="80" r="6" fill="#333"/>
+                        <circle cx="118" cy="80" r="6" fill="#333"/>
+                        <!-- Gözlük -->
+                        <circle cx="80" cy="80" r="18" fill="none" stroke="#4A90D9" stroke-width="3"/>
+                        <circle cx="120" cy="80" r="18" fill="none" stroke="#4A90D9" stroke-width="3"/>
+                        <line x1="98" y1="80" x2="102" y2="80" stroke="#4A90D9" stroke-width="3"/>
+                        <!-- Burun -->
+                        <ellipse cx="100" cy="100" rx="8" ry="6" fill="#D2691E"/>
+                        <!-- Ağız - gülümseyen -->
+                        <path d="M 85 110 Q 100 125 115 110" stroke="#333" stroke-width="3" fill="none"/>
+                        <!-- Kulaklar -->
+                        <circle cx="50" cy="60" r="20" fill="#FFB347"/>
+                        <circle cx="150" cy="60" r="20" fill="#FFB347"/>
+                        <circle cx="50" cy="60" r="12" fill="#FFE4B5"/>
+                        <circle cx="150" cy="60" r="12" fill="#FFE4B5"/>
+                        <!-- Yele -->
+                        <path d="M 40 120 Q 30 150 50 180 Q 100 200 150 180 Q 170 150 160 120" fill="#FF8C00"/>
+                        <!-- Tişört -->
+                        <rect x="60" y="140" width="80" height="50" rx="10" fill="#40E0D0"/>
+                        <text x="100" y="170" text-anchor="middle" fill="white" font-size="14" font-weight="bold">A</text>
+                    </svg>
+                </div>
+                <h1>Elifba Macerası</h1>
+                <p class="tagline">Aslan Ahmet ile başlayalım mı?</p>
+                <button id="play-btn" class="btn btn-primary">
+                    <span class="btn-icon">▶</span>
+                    Oynamaya Başla
+                </button>
+                <div class="menu-buttons">
+                    <button id="badges-btn" class="btn btn-secondary">
+                        <span class="btn-icon">⭐</span>
+                        Rozetlerim
+                    </button>
+                    <button id="settings-btn" class="btn btn-secondary">
+                        <span class="btn-icon">⚙️</span>
+                        Ayarlar
+                    </button>
+                </div>
+            </div>
+            <div class="streak-display" id="streak-display">
+                <span class="streak-icon">🕯️</span>
+                <span class="streak-text">Gün: <strong id="streak-count">0</strong></span>
+            </div>
+        </section>
+
+        <!-- Seviye Seçim Ekranı -->
+        <section id="level-select" class="screen">
+            <header class="level-header">
+                <button class="back-btn" onclick="showScreen('main-menu')">← Geri</button>
+                <h2>Seviyeler</h2>
+                <div class="stars-total">
+                    <span class="star-icon">⭐</span>
+                    <span id="total-stars">0</span>
+                </div>
+            </header>
+            <div class="levels-grid" id="levels-grid">
+                <!-- Seviyeler JS ile doldurulacak -->
+            </div>
+        </section>
+
+        <!-- Oyun Ekranı -->
+        <section id="game-screen" class="screen">
+            <header class="game-header">
+                <button class="back-btn" onclick="showScreen('level-select')">← Çıkış</button>
+                <div class="level-info">
+                    <span id="current-level-name">Seviye 1</span>
+                </div>
+                <div class="stars-display">
+                    <span class="star" id="star-1">☆</span>
+                    <span class="star" id="star-2">☆</span>
+                    <span class="star" id="star-3">☆</span>
+                </div>
+            </header>
+
+            <div class="game-area">
+                <div class="question-area" id="question-area">
+                    <!-- Soru içeriği JS ile doldurulacak -->
+                </div>
+
+                <div class="options-area" id="options-area">
+                    <!-- Seçenekler JS ile doldurulacak -->
+                </div>
+            </div>
+
+            <div class="mascot-speech" id="mascot-speech">
+                <div class="speech-bubble">
+                    <p id="mascot-text">Hadi başlayalım!</p>
+                </div>
+                <div class="mascot-small">
+                    <svg viewBox="0 0 60 60" class="mascot-mini">
+                        <circle cx="30" cy="30" r="25" fill="#FFB347"/>
+                        <circle cx="22" cy="25" r="4" fill="white"/>
+                        <circle cx="38" cy="25" r="4" fill="white"/>
+                        <circle cx="23" cy="25" r="2" fill="#333"/>
+                        <circle cx="37" cy="25" r="2" fill="#333"/>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Feedback Overlay -->
+            <div id="feedback-overlay" class="feedback-overlay hidden">
+                <div class="feedback-content" id="feedback-content">
+                    <!-- Animasyonlar JS ile -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Rozetler Ekranı -->
+        <section id="badges-screen" class="screen">
+            <header class="level-header">
+                <button class="back-btn" onclick="showScreen('main-menu')">← Geri</button>
+                <h2>📋 Rozetlerim</h2>
+            </header>
+            <div class="badges-grid" id="badges-grid">
+                <!-- Rozetler JS ile doldurulacak -->
+            </div>
+        </section>
+
+        <!-- Ayarlar Ekranı -->
+        <section id="settings-screen" class="screen">
+            <header class="level-header">
+                <button class="back-btn" onclick="showScreen('main-menu')">← Geri</button>
+                <h2>Ayarlar</h2>
+            </header>
+            <div class="settings-content">
+                <div class="setting-item">
+                    <label>Ses Efektleri</label>
+                    <button id="sound-toggle" class="toggle-btn active">Açık</button>
+                </div>
+                <div class="setting-item">
+                    <label>Müzik</label>
+                    <button id="music-toggle" class="toggle-btn active">Açık</button>
+                </div>
+                <div class="setting-item">
+                    <label>İlerlemeyi Sıfırla</label>
+                    <button id="reset-btn" class="btn btn-danger">Sıfırla</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="js/levels.js"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/game.js"></script>
+</body>
+</html>
