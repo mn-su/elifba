@@ -3,6 +3,8 @@
 Aslan Ahmet ile eğlenceli bir şekilde Elifba öğrenme macerası! 
 20 farklı seviyeden oluşan ve oyunlaştırma dinamikleri (rozetler, streak, puanlama) içeren modern bir çocuk eğitim uygulaması.
 
+🎮 **[Hemen Oynamak İçin Tıklayın (Canlı Demo)](https://mn-su.github.io/elifba/)**
+
 ## Özellikler
 
 - **20 Öğretici Seviye:** Harf tanıma, eşleştirme, hareke ve kelime okuma.
