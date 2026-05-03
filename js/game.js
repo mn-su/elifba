@@ -12,6 +12,7 @@ class GameManager {
             'letter_shape',
             'harka_recognition',
             'harka_application',
+            'harka_match',
             'word_reading',
             'mixed_review',
             'listen_and_choose'
@@ -96,75 +97,184 @@ class GameManager {
         if (gameState && typeof gameState.applyUnlocksFromProgress === 'function') {
             gameState.applyUnlocksFromProgress();
         }
+
         const grid = document.getElementById('levels-grid');
         grid.innerHTML = '';
-        grid.classList.add('single-page-map');
-
-        const canvas = document.createElement('div');
-        canvas.className = 'levels-map-canvas';
-        canvas.setAttribute('aria-label', '20 bölümlük seviye haritası');
-        grid.appendChild(canvas);
-
-        const levelIds = Object.keys(levelsData).sort((a, b) => {
-            const na = parseInt(a.split('_')[1], 10);
-            const nb = parseInt(b.split('_')[1], 10);
-            return na - nb;
-        });
+        grid.classList.remove('single-page-map');
+        grid.classList.add('map-slider');
 
         const mapViewBox = { width: 1200, height: 760 };
-        const positions = [
-            { x: 105, y: 622 }, { x: 145, y: 562 }, { x: 168, y: 492 }, { x: 232, y: 405 }, { x: 316, y: 344 },
-            { x: 416, y: 366 }, { x: 475, y: 430 }, { x: 458, y: 516 }, { x: 505, y: 592 }, { x: 618, y: 612 },
-            { x: 735, y: 586 }, { x: 794, y: 508 }, { x: 846, y: 421 }, { x: 922, y: 352 }, { x: 1016, y: 346 },
-            { x: 1068, y: 426 }, { x: 1020, y: 526 }, { x: 1040, y: 604 }, { x: 1110, y: 632 }, { x: 1156, y: 655 }
+        const mapPages = [
+            {
+                page: 1,
+                title: 'Giriş Macerası',
+                range: '1-20',
+                description: 'Harfler, ilk kelimeler ve temel harekeler',
+                asset: 'assets/map-beginner.svg',
+                start: 1,
+                end: 20,
+                positions: [
+                    { x: 105, y: 622 }, { x: 145, y: 562 }, { x: 168, y: 492 }, { x: 232, y: 405 }, { x: 316, y: 344 },
+                    { x: 416, y: 366 }, { x: 475, y: 430 }, { x: 458, y: 516 }, { x: 505, y: 592 }, { x: 618, y: 612 },
+                    { x: 735, y: 586 }, { x: 794, y: 508 }, { x: 846, y: 421 }, { x: 922, y: 352 }, { x: 1016, y: 346 },
+                    { x: 1068, y: 426 }, { x: 1020, y: 526 }, { x: 1040, y: 604 }, { x: 1110, y: 632 }, { x: 1156, y: 655 }
+                ]
+            },
+            {
+                page: 2,
+                title: 'Orta Macera',
+                range: '21-40',
+                description: 'Harf şekilleri, sükûn, şedde, med, tenvin ve kısa cümleler',
+                asset: 'assets/map-intermediate.svg',
+                start: 21,
+                end: 40,
+                positions: [
+                    { x: 76, y: 638 }, { x: 132, y: 565 }, { x: 230, y: 612 }, { x: 330, y: 552 }, { x: 296, y: 448 },
+                    { x: 168, y: 420 }, { x: 124, y: 318 }, { x: 242, y: 268 }, { x: 368, y: 306 }, { x: 470, y: 244 },
+                    { x: 590, y: 272 }, { x: 694, y: 338 }, { x: 812, y: 286 }, { x: 932, y: 246 }, { x: 1080, y: 310 },
+                    { x: 1122, y: 412 }, { x: 1015, y: 488 }, { x: 890, y: 556 }, { x: 1002, y: 640 }, { x: 1140, y: 676 }
+                ]
+            }
         ];
 
-        levelIds.forEach((levelId, idx) => {
-            const level = levelsData[levelId];
-            const progress = gameState.state.levelProgress[levelId] || { stars: 0, completed: false };
-            const pos = positions[idx] || { x: 50, y: 50 };
-            const isCurrent = level.unlocked && !progress.completed;
-            const status = !level.unlocked ? 'locked' : progress.completed ? 'completed' : 'current';
+        const shell = document.createElement('div');
+        shell.className = 'map-slider-shell';
+        shell.innerHTML = `
+            <div class="map-slider-topbar">
+                <button class="map-nav-btn" type="button" id="map-prev" aria-label="Önceki harita">‹</button>
+                <div class="map-page-dots" id="map-page-dots" aria-label="Harita sayfaları"></div>
+                <button class="map-nav-btn" type="button" id="map-next" aria-label="Sonraki harita">›</button>
+            </div>
+            <div class="map-slider-viewport no-scrollbar" id="map-slider-viewport">
+                <div class="map-slider-track" id="map-slider-track"></div>
+            </div>
+        `;
+        grid.appendChild(shell);
 
-            const card = document.createElement('button');
-            card.type = 'button';
-            card.className = `level-card ${status}`;
-            card.style.left = `${(pos.x / mapViewBox.width) * 100}%`;
-            card.style.top = `${(pos.y / mapViewBox.height) * 100}%`;
-            card.title = `${level.title}: ${level.description}`;
-            card.setAttribute('aria-label', `${levelId.split('_')[1]}. bölüm: ${level.title}`);
+        const track = shell.querySelector('#map-slider-track');
+        const dots = shell.querySelector('#map-page-dots');
+        const viewport = shell.querySelector('#map-slider-viewport');
 
-            const starsHTML = progress.completed
-                ? `<span class="level-star collected">⭐</span><span class="level-star ${progress.stars >= 2 ? 'collected' : ''}">⭐</span><span class="level-star ${progress.stars >= 3 ? 'collected' : ''}">⭐</span>`
-                : `<span class="level-star empty">☆</span><span class="level-star empty">☆</span><span class="level-star empty">☆</span>`;
+        mapPages.forEach((page, pageIndex) => {
+            const slide = document.createElement('article');
+            slide.className = `map-slide map-slide-${page.page}`;
+            slide.dataset.page = String(page.page);
+            slide.style.backgroundImage = `url("${page.asset}")`;
+            slide.setAttribute('aria-label', `${page.title} seviye haritası`);
 
-            card.innerHTML = level.unlocked ? `
-                ${isCurrent ? '<div class="level-current-label">BURADASIN</div>' : ''}
-                <span class="level-locked-icon">${progress.completed ? '✓' : ''}</span>
-                <div class="level-number">${levelId.split('_')[1]}</div>
-                <div class="level-title-short">${level.title}</div>
-                <div class="level-stars">${starsHTML}</div>
-            ` : `
-                <span class="level-locked-icon">🔒</span>
-                <div class="level-number">${levelId.split('_')[1]}</div>
-                <div class="level-title-short">Kilitli</div>
-                <div class="level-stars"><span class="level-star empty">☆</span><span class="level-star empty">☆</span><span class="level-star empty">☆</span></div>
+            slide.innerHTML = `
+                <div class="map-slide-caption">
+                    <strong>${page.title}</strong>
+                    <span>${page.range}</span>
+                    <small>${page.description}</small>
+                </div>
+                <div class="levels-map-canvas" aria-label="${page.title} seviye noktaları"></div>
             `;
+            const canvas = slide.querySelector('.levels-map-canvas');
 
-            if (level.unlocked) {
-                card.addEventListener('click', () => this.startLevel(levelId));
-            } else {
-                card.disabled = true;
+            for (let levelNumber = page.start; levelNumber <= page.end; levelNumber++) {
+                const levelId = `level_${levelNumber}`;
+                const level = levelsData[levelId];
+                if (!level) continue;
+
+                const progress = gameState.state.levelProgress[levelId] || { stars: 0, completed: false };
+                const localIndex = levelNumber - page.start;
+                const pos = page.positions[localIndex] || { x: 600, y: 380 };
+                const isCurrent = level.unlocked && !progress.completed;
+                const status = !level.unlocked ? 'locked' : progress.completed ? 'completed' : 'current';
+
+                const card = document.createElement('button');
+                card.type = 'button';
+                card.className = `level-card ${status}`;
+                card.style.left = `${(pos.x / mapViewBox.width) * 100}%`;
+                card.style.top = `${(pos.y / mapViewBox.height) * 100}%`;
+                card.title = `${level.title}: ${level.description || ''}`;
+                card.setAttribute('aria-label', `${levelNumber}. bölüm: ${level.title}`);
+                card.dataset.levelId = levelId;
+
+                const starsHTML = progress.completed
+                    ? `<span class="level-star collected">⭐</span><span class="level-star ${progress.stars >= 2 ? 'collected' : ''}">⭐</span><span class="level-star ${progress.stars >= 3 ? 'collected' : ''}">⭐</span>`
+                    : `<span class="level-star empty">☆</span><span class="level-star empty">☆</span><span class="level-star empty">☆</span>`;
+
+                card.innerHTML = level.unlocked ? `
+                    ${isCurrent ? '<div class="level-current-label">BURADASIN</div>' : ''}
+                    <span class="level-locked-icon">${progress.completed ? '✓' : ''}</span>
+                    <div class="level-number">${levelNumber}</div>
+                    <div class="level-title-short">${level.title}</div>
+                    <div class="level-stars">${starsHTML}</div>
+                ` : `
+                    <span class="level-locked-icon">🔒</span>
+                    <div class="level-number">${levelNumber}</div>
+                    <div class="level-title-short">Kilitli</div>
+                    <div class="level-stars"><span class="level-star empty">☆</span><span class="level-star empty">☆</span><span class="level-star empty">☆</span></div>
+                `;
+
+                if (level.unlocked) {
+                    card.addEventListener('click', () => this.startLevel(levelId));
+                } else {
+                    card.disabled = true;
+                }
+                canvas.appendChild(card);
             }
 
-            canvas.appendChild(card);
+            track.appendChild(slide);
+
+            const dot = document.createElement('button');
+            dot.type = 'button';
+            dot.className = 'map-page-dot';
+            dot.textContent = page.range;
+            dot.setAttribute('aria-label', `${page.title} haritasına git`);
+            dot.addEventListener('click', () => this.scrollToMapPage(pageIndex));
+            dots.appendChild(dot);
         });
+
+        shell.querySelector('#map-prev').addEventListener('click', () => this.scrollToMapPage(this.getVisibleMapPageIndex() - 1));
+        shell.querySelector('#map-next').addEventListener('click', () => this.scrollToMapPage(this.getVisibleMapPageIndex() + 1));
+        viewport.addEventListener('scroll', () => this.updateMapDots());
 
         let totalStars = 0;
         Object.keys(gameState.state.levelProgress).forEach(levelId => {
             totalStars += gameState.state.levelProgress[levelId].stars || 0;
         });
         document.getElementById('total-stars').textContent = totalStars;
+
+        requestAnimationFrame(() => {
+            this.focusCurrentMapPage();
+            this.updateMapDots();
+        });
+    }
+
+    getVisibleMapPageIndex() {
+        const viewport = document.getElementById('map-slider-viewport');
+        if (!viewport || !viewport.clientWidth) return 0;
+        return Math.round(viewport.scrollLeft / viewport.clientWidth);
+    }
+
+    scrollToMapPage(pageIndex) {
+        const viewport = document.getElementById('map-slider-viewport');
+        const track = document.getElementById('map-slider-track');
+        if (!viewport || !track) return;
+        const maxIndex = Math.max(0, track.children.length - 1);
+        const targetIndex = Math.max(0, Math.min(maxIndex, pageIndex));
+        viewport.scrollTo({ left: targetIndex * viewport.clientWidth, behavior: 'smooth' });
+        setTimeout(() => this.updateMapDots(), 220);
+    }
+
+    focusCurrentMapPage() {
+        const viewport = document.getElementById('map-slider-viewport');
+        const currentCard = document.querySelector('.map-slide .level-card.current') || document.querySelector('.map-slide .level-card:not(.locked)');
+        if (!viewport || !currentCard) return;
+        const slide = currentCard.closest('.map-slide');
+        const slides = Array.from(document.querySelectorAll('.map-slide'));
+        const pageIndex = Math.max(0, slides.indexOf(slide));
+        viewport.scrollTo({ left: pageIndex * viewport.clientWidth, behavior: 'auto' });
+        this.updateMapDots();
+    }
+
+    updateMapDots() {
+        const dots = Array.from(document.querySelectorAll('.map-page-dot'));
+        const pageIndex = this.getVisibleMapPageIndex();
+        dots.forEach((dot, index) => dot.classList.toggle('active', index === pageIndex));
     }
 
     // Seviye Başlat
@@ -286,6 +396,23 @@ class GameManager {
                     </div>
                 `;
                 break;
+            case 'harka_match': {
+                const pairs = task.question.pairs || [];
+                const leftCards = pairs.map(pair => `<button class="harka-left-card arabic-text" type="button" data-answer="${pair.right}">${pair.left}</button>`).join('');
+                const rightCards = [...pairs]
+                    .sort(() => Math.random() - 0.5)
+                    .map(pair => `<button class="harka-right-card" type="button" data-value="${pair.right}">${pair.right}</button>`).join('');
+                questionHTML = `
+                    <div class="question-stack">
+                        <p>${task.question.text || 'Eşleştir'}</p>
+                        <div class="harka-match-board">
+                            <div class="harka-match-column harka-left-column">${leftCards}</div>
+                            <div class="harka-match-column harka-right-column">${rightCards}</div>
+                        </div>
+                    </div>
+                `;
+                break;
+            }
             case 'drag_to_target':
                 questionHTML = `
                     <div class="question-stack">
@@ -461,6 +588,11 @@ class GameManager {
                 break;
             }
 
+            case 'harka_match':
+                this.setupHarkaMatch(task);
+                optionsArea.innerHTML = '<p class="sentence-instruction">Soldaki harekeli harfi sağdaki sesiyle eşleştir.</p>';
+                break;
+
             case 'sentence_order':
                 const slots = document.querySelectorAll('.sentence-slot');
                 const bank = document.querySelector('.sentence-bank');
@@ -484,6 +616,60 @@ class GameManager {
                 submitBtn.addEventListener('click', () => this.checkAnswer(task, null));
             }
         }
+    }
+
+    setupHarkaMatch(task) {
+        const leftCards = Array.from(document.querySelectorAll('.harka-left-card'));
+        const rightCards = Array.from(document.querySelectorAll('.harka-right-card'));
+        let selectedLeft = null;
+        let matchedCount = 0;
+
+        const clearActive = () => {
+            leftCards.forEach(card => card.classList.remove('active'));
+            rightCards.forEach(card => card.classList.remove('active'));
+        };
+
+        leftCards.forEach(card => {
+            card.addEventListener('click', () => {
+                if (card.classList.contains('matched')) return;
+                selectedLeft = card;
+                clearActive();
+                card.classList.add('active');
+                audioManager.speakArabic(card.textContent, { interrupt: true });
+            });
+        });
+
+        rightCards.forEach(card => {
+            card.addEventListener('click', () => {
+                if (card.classList.contains('matched')) return;
+                audioManager.speakTurkish(card.textContent, { interrupt: true });
+                if (!selectedLeft) {
+                    card.classList.add('active');
+                    setTimeout(() => card.classList.remove('active'), 350);
+                    return;
+                }
+
+                if (selectedLeft.dataset.answer === card.dataset.value) {
+                    selectedLeft.classList.add('matched');
+                    card.classList.add('matched');
+                    matchedCount += 1;
+                    clearActive();
+                    selectedLeft = null;
+                    if (matchedCount >= leftCards.length) {
+                        setTimeout(() => this.checkAnswer(task, { type: 'match', value: true, el: null }), 350);
+                    }
+                } else {
+                    selectedLeft.classList.add('incorrect');
+                    card.classList.add('incorrect');
+                    setTimeout(() => {
+                        selectedLeft.classList.remove('incorrect');
+                        card.classList.remove('incorrect');
+                        clearActive();
+                        selectedLeft = null;
+                    }, 650);
+                }
+            });
+        });
     }
 
     bindSentenceDropTarget(target, isBank = false) {
@@ -557,6 +743,8 @@ class GameManager {
         
         if (task.type === 'sentence_order') {
             isCorrect = this.checkSentenceOrder(task);
+        } else if (task.type === 'harka_match') {
+            isCorrect = answerValue === true;
         } else if (task.type === 'mixed_review') {
             isCorrect = answerValue === task.question.correct;
         } else {
@@ -741,6 +929,7 @@ class GameManager {
             'match_letter_to_image',
             'harka_recognition',
             'harka_application',
+            'harka_match',
             'word_reading',
             'match_word_to_image',
             'sentence_order',
@@ -831,7 +1020,7 @@ class GameManager {
     // İlerlemeyi Sıfırla
     resetProgress() {
         if (confirm('Tüm ilerlemeniz silinecek! Emin misiniz?')) {
-            localStorage.removeItem('arapcaMacerasi_state');
+            localStorage.removeItem('arapcaMacerasi_orta_state');
             location.reload();
         }
     }
