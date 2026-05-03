@@ -301,15 +301,14 @@ h1 {
     overflow-y: auto;
     overscroll-behavior: contain;
     font-family: 'Lexend', 'Nunito', sans-serif;
-    /* Level map arka plan: lush valley görseli */
+    /* Level map arka plan: sade manzara */
     background:
-        var(--level-map-image, url("../assets/lush-valley/map.png")),
         radial-gradient(600px 260px at 18% 22%, rgba(255,255,255,0.9), rgba(255,255,255,0) 60%),
         radial-gradient(520px 240px at 76% 18%, rgba(255,255,255,0.85), rgba(255,255,255,0) 62%),
         linear-gradient(180deg, #a6ddff 0%, #c8f1ff 22%, #bff0c8 22%, #bff0c8 58%, #f7d7a4 58%, #f7d7a4 100%);
-    background-size: cover, auto, auto, auto;
-    background-position: center, center, center, center;
-    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+    background-size: auto, auto, auto;
+    background-position: center, center, center;
+    background-repeat: no-repeat, no-repeat, no-repeat;
     /* scroll ile birlikte parallax olmasın */
     background-attachment: scroll;
 }
